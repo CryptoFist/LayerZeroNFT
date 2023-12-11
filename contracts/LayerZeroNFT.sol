@@ -4,9 +4,9 @@ pragma solidity ^0.8.20;
 import "@layerzerolabs/solidity-examples/contracts/token/onft/ONFT721.sol";
 
 contract LayerZeroNFT is ONFT721 {
-    uint256 brigedCount;
+    uint256 public brigedCount;
 
-    uint256 tokenId;
+    uint256 public tokenId;
 
     constructor(
         string memory _name,
@@ -19,26 +19,6 @@ contract LayerZeroNFT is ONFT721 {
 
     function mintNFT() external {
         _mint(msg.sender, tokenId++);
-    }
-
-    function sendFrom(
-        address _from,
-        uint16 _dstChainId,
-        bytes memory _toAddress,
-        uint _tokenId,
-        address payable _refundAddress,
-        address _zroPaymentAddress,
-        bytes memory _adapterParams
-    ) public payable virtual override(ONFT721Core, IONFT721Core) {
-        _send(
-            _from,
-            _dstChainId,
-            _toAddress,
-            _toSingletonArray(_tokenId),
-            _refundAddress,
-            _zroPaymentAddress,
-            _adapterParams
-        );
     }
 
     function _debitFrom(
@@ -70,7 +50,8 @@ contract LayerZeroNFT is ONFT721 {
         );
         brigedCount++;
         if (!_exists(_tokenId)) {
-            _safeMint(_toAddress, _tokenId);
+            _safeMint(_toAddress, tokenId);
+            ++tokenId;
         } else {
             _transfer(address(this), _toAddress, _tokenId);
         }

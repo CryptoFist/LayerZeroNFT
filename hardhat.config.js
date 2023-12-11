@@ -10,7 +10,18 @@ require("dotenv").config();
 
 module.exports = {
     defaultNetwork: "hardhat",
-    networks: {},
+    networks: {
+        goerli: {
+            url: `https://goerli.infura.io/v3/${process.env.INFURA_ID}`,
+            chainId: 5,
+            accounts: [process.env.DEPLOYER_WALLET],
+        },
+        fuji: {
+            url: "https://api.avax-test.network/ext/bc/C/rpc",
+            chainId: 43113,
+            accounts: [process.env.DEPLOYER_WALLET],
+        },
+    },
     solidity: {
         compilers: [
             {
@@ -33,6 +44,13 @@ module.exports = {
             },
         ],
     },
+    etherscan: {
+        apiKey: {
+            goerli: process.env.ETH_API_KEY,
+            avalancheFujiTestnet: process.env.AVAX_API_KEY,
+        },
+    },
+
     mocha: {
         timeout: 2000000,
     },
